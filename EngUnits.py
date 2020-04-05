@@ -1,16 +1,22 @@
 #!/usr/bin/env python3
 
-'''Module designed to make common energy unit conversions.'''
+'''Module designed to make common engineering unit conversions.'''
 
-umass = ['kg', 'g', 'metric ton', 'lbm', 'oz', 'ton']
-ulength = ['m', 'cm', 'mm', 'mum', 'A', 'in', 'ft', 'yd', 'mile']
-uvolume = ['m3', 'L', 'cm3', 'mL', 'ft3', 'imp gal', 'gal', 'qt']
-uforce = ['N', 'kg-m/s2', 'dyne', 'g-m/s2', 'lbf', 'lbm-ft/s2']
-upressure = ['atm', 'Pa', 'kPa', 'bar', 'dyne/cm2', 'mmHg', 'torr', 'mH2O', 'lbf/in2', 'psi', 'inHg']
-uenergy = ['J', 'N-m', 'ergs', 'dyne-cm', 'kW-h', 'cal', 'ft-lbf', 'Btu']
-upower = ['W', 'J/s', 'cal/s', 'ft-lbf/s', 'Btu/s', 'hp']
+# ======== Functions ======================================================================
 
 def convert(value, uin, uout):
+    """Currently supported units:
+    Mass: 'kg', 'g', 'metric ton', 'lbm', 'oz', 'ton'
+    Length: 'm', 'cm', 'mm', 'mum', 'A', 'in', 'ft', 'yd', 'mile'
+    Volume: 'm3', 'L', 'cm3', 'mL', 'ft3', 'imp gal', 'gal', 'qt'
+    Force: 'N', 'kg-m/s2', 'dyne', 'g-m/s2', 'lbf', 'lbm-ft/s2'
+    Pressure: 'atm', 'Pa', 'kPa', 'bar', 'dyne/cm2', 'mmHg', 'torr', 'mH2O', 'lbf/in2', 'psi', 'ftH2O', 'inHg'
+    Energy: 'J', 'N-m', 'ergs', 'dyne-cm', 'kW-h', 'cal', 'ft-lbf', 'Btu'
+    Power: 'W', 'J/s', 'cal/s', 'ft-lbf/s', 'Btu/s', 'hp'
+    Moles: 'mol', 'lbmol'
+
+    Units to add:
+    """
 
     umass = ['kg', 'g', 'metric ton', 'lbm', 'oz', 'ton']
     ulength = ['m', 'cm', 'mm', 'mum', 'A', 'in', 'ft', 'yd', 'mile']
@@ -20,7 +26,11 @@ def convert(value, uin, uout):
                  'lbf/in2', 'psi', 'ftH2O', 'inHg']
     uenergy = ['J', 'N-m', 'ergs', 'dyne-cm', 'kW-h', 'cal', 'ft-lbf', 'Btu']
     upower = ['W', 'J/s', 'cal/s', 'ft-lbf/s', 'Btu/s', 'hp']
+    umol = ['mol', 'lbmol']
 
+    # Dictionaries contain coefficients with respect to one of the units
+    # The units in are divided by their coefficient, then multiplied by 
+    # the units out coefficient
     mass_out = {'kg':1, 'g':1000, 'metric ton':0.001, 'lbm':2.20462, 
                 'oz':35.27392, 'ton':5e-4/0.453593}
     length_out = {'m':1, 'cm':100, 'mm':1000, 'mum':1e6, 'A':1e10, 
@@ -36,10 +46,12 @@ def convert(value, uin, uout):
                   'cal':0.23901, 'ft-lbf':0.7376, 'Btu':9.486e-4}
     power_out = {'W':1, 'J/s':1, 'cal/s':0.23901, 'ft-lbf/s':0.7376, 
                  'Btu/s':9.486e-4, 'hp':1.341e-3}
+    moles_out = {'mol':453.59237, 'lbmol':1}
 
     types_list = [mass_out, length_out, volume_out, force_out, pressure_out, 
-                  energy_out, power_out]
+                  energy_out, power_out, moles_out]
 
+    found = False
     for udic in types_list:
         if uin in udic.keys():
             units = udic
@@ -83,7 +95,8 @@ def getR(units):
     return R
 
 
-class Rgas:
+# =========== Hidden Classes ======================================================
+class _Rgas:
     '''To see options run: ```print(Rgas())```'''
     def __init__(self):
 
@@ -98,17 +111,36 @@ class Rgas:
         self.Btu = 1.987
 
     def __str__(self):
-        print("R Gas Constant:")
-        print("\nUnits\t\t\tAttribute Name")
-        print('-'*40)
-        print("m3-Pa/(mol-K)\t\tPa")
-        print("L-bar/(mol-K)\t\tbar")
-        print("L-atm/(mol-K)\t\tatm")
-        print("L-mmHg/(mol-K)\t\tmmHg")
-        print("ft3-atm/(lbmol-R)\tatmR")
-        print("ft3-psia/(lbmol-R)\tpsi")
-        print("J/(mol-K)\t\tJ")
-        print("cal/(mol-K)\t\tcal")
-        print("Btu/(lb-mol-R)\t\tBtu")
-        return ""
+        # print("R Gas Constant:")
+        # print("\nUnits\t\t\tAttribute Name")
+        # print('-'*40)
+        # print("m3-Pa/(mol-K)\t\tPa")
+        # print("L-bar/(mol-K)\t\tbar")
+        # print("L-atm/(mol-K)\t\tatm")
+        # print("L-mmHg/(mol-K)\t\tmmHg")
+        # print("ft3-atm/(lbmol-R)\tatmR")
+        # print("ft3-psia/(lbmol-R)\tpsi")
+        # print("J/(mol-K)\t\tJ")
+        # print("cal/(mol-K)\t\tcal")
+        # print("Btu/(lb-mol-R)\t\tBtu")
 
+        string = f"""\
+
+R Gas Constant:
+
+Units               Accessor    Value
+--------------------------------------
+m3-Pa/(mol-K)       Pa          {self.Pa}
+L-bar/(mol-K)       bar         {self.bar}
+L-atm/(mol-K)       atm         {self.atm}
+L-mmHg/(mol-K)      mmHg        {self.mmHg}
+ft3-atm/(lbmol-R)   atmR        {self.atmR}
+ft3-psia/(lbmol-R)  psi         {self.psi}
+J/(mol-K)           J           {self.J}
+cal/(mol-K)         cal         {self.cal}
+Btu/(lb-mol-R)      Btu         {self.Btu}"""
+        return string
+
+# ====== Data ====================================================
+
+Rgas = _Rgas()
