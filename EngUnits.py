@@ -43,7 +43,7 @@ def convert(value, uin, uout):
                     'dyne/cm2':1.01325e6, 'mmHg':760, 'mH2O':10.333, 
                     'lbf/in2':14.696, 'psi':14.696, 'ftH2O':33.9, 'inHg':29.921}
     energy_out = {'J':1, 'N-m':1, 'ergs':1e7, 'dyne-cm':1e7, 'kW-h':2.778e-7, 
-                  'cal':0.23901, 'ft-lbf':0.7376, 'Btu':9.486e-4, 'eV':6.242e18}
+                  'cal':0.23901, 'ft-lbf':0.7376, 'Btu':9.486e-4, 'eV':6.24151e18}
     power_out = {'W':1, 'J/s':1, 'cal/s':0.23901, 'ft-lbf/s':0.7376, 
                  'Btu/s':9.486e-4, 'hp':1.341e-3}
     moles_out = {'mol':453.59237, 'lbmol':1}
